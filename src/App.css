@@ -2,8 +2,24 @@
     margin: 4rem 2.5rem;
 }
 
+.auth-form {
+    width: 30rem;
+    max-width: 80%;
+    margin: 1rem auto;
+}
 
-.form-actions button {
+.form-control label,
+.form-control input,
+.form-control textarea {
+    width: 100%;
+    display: block;
+}
+
+.form-control {
+    margin-bottom: 0.5rem;
+}
+
+.form-actions button, .btn {
     background: #8756ff;
     font: inherit;
     border: 1px solid #8756ff;
@@ -16,7 +32,9 @@
 }
 
 .form-actions button:hover,
-.form-actions button:active {
+.form-actions button:active,
+.btn:hover,
+.btn:active {
     background: #7249d9;
     border-color: #7249d9;
     color: #ebebeb;

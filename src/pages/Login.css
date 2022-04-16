@@ -3,18 +3,3 @@
     max-width: 80%;
     margin: 2rem auto;
 }
-.auth-form {
-    width: 30rem;
-    max-width: 80%;
-    margin: 1rem auto;
-}
-
-.form-control label,
-.form-control input {
-    width: 100%;
-    display: block;
-}
-
-.form-control {
-    margin-bottom: 0.5rem;
-}
