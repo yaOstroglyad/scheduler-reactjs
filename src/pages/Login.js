@@ -38,7 +38,7 @@ class LoginPage extends Component {
         this.passwordEl.current = 'invalidpassword2';
     }
 
-    stateHandler = (event, eventType) => {
+    stateHandler = () => {
         this.setState(prevState => {
             return { isLogin: !prevState.isLogin }
         });
@@ -107,7 +107,7 @@ class LoginPage extends Component {
                            defaultValue={this.passwordEl.current}/>
                 </div>
                 <div className="form-actions">
-                    <button type="button" onClick={e => this.stateHandler(e, "switch")}>Switch to {this.state.isLogin ? "Login" : "Sign up"}</button>
+                    <button type="button" onClick={this.stateHandler}>Switch to {this.state.isLogin ? "Sign up" : "Login"}</button>
                     {/*<button type="button" onClick={e => this.stateHandler(e, "resetPassword")}>Forgot password</button>*/}
                     <button type="submit">Submit</button>
                 </div>
