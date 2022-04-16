@@ -7,7 +7,29 @@ import EventList from "../components/EventCard/EventList/EventList";
 import Spinner from "../components/Spinner/Spinner";
 
 
-const getRequestBodyByType = (type, args) => {
+const bookingSchema = (type, args) => {
+    const payload = {
+        booking: `mutation {
+	        bookEvent(eventId: "${args.eventId}", userId: "${args.userId}") {
+                _id
+                createdAt
+                updatedAt
+                event {
+                    _id
+                    title
+                }
+                user {
+                    _id
+                    email
+                }
+            }
+        }`
+    }
+    return payload[type];
+}
+
+
+const eventsSchema = (type, args) => {
     const payload = {
         create: `mutation {
             createEvent(event: {
@@ -67,7 +89,8 @@ class EventsPage extends Component {
         creating: false,
         events: [],
         isLoading: false,
-        selectedEvent: null
+        selectedEvent: null,
+        isActive: true
     }
 
     static contextType = AuthContext;
@@ -81,6 +104,7 @@ class EventsPage extends Component {
     }
 
     componentDidMount() {
+        this.setState({isActive: true})
         this.fetchEvents();
     }
 
@@ -89,6 +113,43 @@ class EventsPage extends Component {
     }
 
     bookEventHandler = () => {
+        this.setState({isLoading: true});
+
+        if (!this.context.token) {
+            this.setState({selectedEvent: null, isLoading: false});
+            return;
+        }
+
+        const eventId = this.state.selectedEvent._id;
+        const token = this.context.token;
+        const userId = this.context.userId;
+
+        let requestBody = {
+            query: bookingSchema('booking', {eventId, userId})
+        }
+
+        fetch('http://localhost:3000/graphql', {
+            method: "POST",
+            body: JSON.stringify(requestBody),
+            headers: {
+                "Authorization": 'Bearer ' + token,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(res => {
+            if(res.status !== 200 && res.status !== 201) {
+                throw new Error("Failed request!")
+            } else {
+                return res.json();
+            }
+        })
+        .then(event => {
+            console.log('event', event)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+        this.setState({isLoading: false});
         this.setState({selectedEvent: null})
     }
 
@@ -107,7 +168,7 @@ class EventsPage extends Component {
         }
 
         let requestBody = {
-            query: getRequestBodyByType('create', {title, price, date, description})
+            query: eventsSchema('create', {title, price, date, description})
         }
 
         const token = this.context.token;
@@ -156,7 +217,7 @@ class EventsPage extends Component {
         this.setState({isLoading: true});
 
         let requestBody = {
-            query: getRequestBodyByType('getList', {})
+            query: eventsSchema('getList', {})
         }
 
         fetch('http://localhost:3000/graphql', {
@@ -175,12 +236,21 @@ class EventsPage extends Component {
         })
         .then(resultDate => {
             const events = resultDate.data.events;
-            this.setState({events: events, isLoading: false});
+            console.log('this.state.isActive', this.state.isActive)
+            if (this.state.isActive) {
+                this.setState({events: events, isLoading: false});
+            }
         })
         .catch(err => {
             console.log(err)
-            this.setState({isLoading: false});
+            if (this.state.isActive) {
+                this.setState({isLoading: false});
+            }
         })
+    }
+
+    componentWillUnmount() {
+        this.setState({isActive: false})
     }
 
     render() {
@@ -215,7 +285,7 @@ class EventsPage extends Component {
                     </Modal>)}
                 {this.state.selectedEvent && (
                     <Modal title={"Event details: " + this.state.selectedEvent.title}
-                           confirmText={"Book"}
+                           confirmText={this.context.token ? "Book" : "Confirm"}
                            canCancel
                            canConfirm
                            onCancel={this.modalCancelHandler}
