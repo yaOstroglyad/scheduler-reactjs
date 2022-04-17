@@ -14,10 +14,6 @@ const bookingSchema = (type, args) => {
                 _id
                 createdAt
                 updatedAt
-                event {
-                    _id
-                    title
-                }
                 user {
                     _id
                     email
@@ -124,6 +120,14 @@ class EventsPage extends Component {
         const token = this.context.token;
         const userId = this.context.userId;
 
+        // TODO implement object with variables for request
+        //         let requestBody = {
+        //             query: bookingSchema('booking', {eventId, userId}),
+        //             variables: {
+        //                  eventId: eventId
+        //                  userId: userId
+        //             }
+        //         }
         let requestBody = {
             query: bookingSchema('booking', {eventId, userId})
         }
