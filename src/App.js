@@ -6,7 +6,7 @@ import BookingsPage from "./pages/Bookings";
 import EventsPage from "./pages/Events";
 import LoginPage from "./pages/Login";
 import NotFoundPage from "./pages/NotFound";
-import MainNavigation from "./components/navigation/MainNavigation";
+import MainNavigation from "./components/Navigation/MainNavigation";
 import AuthContext from "./context/auth-context";
 
 
