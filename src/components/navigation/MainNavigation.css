@@ -16,6 +16,7 @@
 }
 
 .main-navigation_items {
+    width: 100%;
     margin-left: 1.5rem;
 }
 
@@ -24,6 +25,7 @@
     margin: 0;
     display: flex;
     list-style: none;
+    justify-content: flex-end;
 }
 
 .main-navigation_items li {

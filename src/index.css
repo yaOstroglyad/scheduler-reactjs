@@ -3,3 +3,7 @@ body {
   margin: 0;
   font-family: monospace;
 }
+
+.mr-1 {
+  margin-right: 1rem;
+}
